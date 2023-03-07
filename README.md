@@ -19,4 +19,3 @@ packer build -var-file=credentials.pkr.hcl  ubuntu-server-docker.pkr.hcl
 - Run packer command referencing the credentials file and the Packer's image definition file:
 ```
 packer build -var-file=credentials.pkr.hcl  base.pkr.hcl
-```
