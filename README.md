@@ -2,6 +2,10 @@
 
 Project to study and test creating ProxMox VM Images using Hashicorp Packer.
 
+# Packer ProxMox plugin configuration
+
+The file ```config.pkr.hcl``` must be in the root directory. And then, it is needed Packer to be initialized with the following command: ```packer init .``` 
+
 # Approach 1 - Create a template from scratch based on an ISO file:
 
 - Download the ISO installation file and upload it to ProxMox
