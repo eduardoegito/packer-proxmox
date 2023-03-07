@@ -7,7 +7,7 @@
 SRC_IMG="https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
 IMG_NAME="jammy-server-cloudimg-amd64-disk-kvm.qcow2"
 
-TEMPL_NAME="ubuntu2204-cloud"
+TEMPL_NAME="ubuntu2204-cloud-base"
 VMID="9000"
 MEM="512"
 DISK_SIZE="20G"
