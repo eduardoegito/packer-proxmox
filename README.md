@@ -14,7 +14,9 @@ packer build -var-file=credentials.pkr.hcl  ubuntu-server-docker.pkr.hcl
 # Approach 2 - Create a template from another template created via cloud-image running a bash script:
 
 - Connect to the ProxMox server via ssh and run the script, as in the following command:
-``` ssh root@proxmox.server < proxmox-create-cloud-template.sh ```
+```
+ssh root@proxmox.server < proxmox-create-cloud-template.sh
+```
 - Create the file credentials.pkr.hcl and configure the parameters
 - Run packer command referencing the credentials file and the Packer's image definition file:
 ```
