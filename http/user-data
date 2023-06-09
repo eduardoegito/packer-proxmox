@@ -3,7 +3,7 @@ autoinstall:
   version: 1
   locale: en_US
   keyboard:
-    layout: de
+    layout: us
   ssh:
     install-server: true
     allow-pw: true
@@ -19,13 +19,14 @@ autoinstall:
     swap:
       size: 0
   user-data:
-    package_upgrade: false
-    timezone: Europe/Berlin
+    package_upgrade: true
+    timezone: America/Vancouver
     users:
       - name: ubuntu
         groups: [adm, sudo]
         lock-passwd: false
         sudo: ALL=(ALL) NOPASSWD:ALL
         shell: /bin/bash
+        plain_text_passwd: 'ubuntu'
         ssh_authorized_keys:
            - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDS2vaLRe+7bf5ogTPKTGUt1gx2LFnTQYBOKRLpf9CYGhq8BfECDiRMr7CDMUe7Ok/u7SFxKe4+Ct8ckPO3VEJwwXEb0ji7b1iipwCRmoKOA1ZFxVWeCQrANw3OalQo9h8VR3sSnFXIEdywQjVA7QOZqFaIJ5ZaKAkK8WiCQ6f+x/EPPThAf1YFKFOJ+untUjDTfy174S8IbhApD6RgG0FYtalj36yKLHBp6EYg1O41HdDp66A+Kr1syKKDeTn9XZaktjywzR/iAZpFLu1BxqpdE3gD0dEH9ykNrJmO6+W+PeUwMnKj/wHdvsDwwY+xUBRE/bYCiKdm1M7GzQdLPSNNz3Vmc1smTXLAfTYgF13cydTV5Cof7hH89KKoELWme/jFym4A3EUus8NkHRf1QRKAEoprF12aEmZi2JQB8hjTOZLSTEerPOCBkuo5/FlPE+EBvgrkoYNWK9IPYJAyXDKEBf10e4a9MPFDTKvM50IL5H6BEMaig3HdMX7VYm6mGdZiQETLNndL1M9Ext7xCyyNGW2l5xzZThXjxF0SJmdLkz9xHIMj+DHF9a8xgff5H+cqhPtYa761V1ntla706Q6Saw+6rXvYfJ6gqeeiij6fNs+hWkW/BzWrhvFIDWZvXs0aazB7RoUFwmdj6LqtbKQQb4nRzZksMPQnPkHTr1S1Ow== cadu@MacBook-Pro-de-Cadu.local

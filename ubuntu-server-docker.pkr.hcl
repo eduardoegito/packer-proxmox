@@ -7,10 +7,6 @@ variable "proxmox_hostname" {
   type = string
 }
 
-variable "proxmox_password" {
-  type = string
-}
-
 variable "proxmox_username" {
   type      = string
   sensitive = true
@@ -29,20 +25,19 @@ variable "vm_name" {
   type = string
 }
 
-# Resource Definiation for the VM Template
-source "proxmox" "ubuntu-server-jammy" {
+source "proxmox" "ubuntu-server-pve01" {
 
   # Proxmox Connection Settings
   proxmox_url = "${var.proxmox_hostname}"
   username    = "${var.proxmox_username}"
-  #password = "${var.proxmox_password}"
   token = "${var.proxmox_api_key}"
   # (Optional) Skip TLS Verification
   insecure_skip_tls_verify = true
 
   # VM General Settings
-  node                 = "${var.proxmox_node}"
+  node                 = "pve01"
   vm_name              = "${var.vm_name}"
+  vm_id = 1001
   template_description = "Ubuntu Server jammy Image"
 
   iso_file         = "local:iso/ubuntu-22.04.2-live-server-amd64.iso"
@@ -58,7 +53,7 @@ source "proxmox" "ubuntu-server-jammy" {
     format            = "raw"
     storage_pool      = "local-lvm"
     storage_pool_type = "lvm"
-    type              = "virtio"
+    type              = "scsi"
   }
 
   cores = "1"
@@ -71,7 +66,7 @@ source "proxmox" "ubuntu-server-jammy" {
     firewall = "false"
   }
 
-  cloud_init              = true
+  cloud_init              = false
   cloud_init_storage_pool = "local-lvm"
   boot_command = [
     "<esc><wait>",
@@ -86,14 +81,142 @@ source "proxmox" "ubuntu-server-jammy" {
   boot_wait            = "5s"
   http_directory       = "http"
   ssh_username         = "ubuntu"
-  ssh_private_key_file = "~/.ssh/id_rsa"
+  ssh_password         = "ubuntu"
+  #ssh_private_key_file = "~/.ssh/id_rsa"
   ssh_timeout          = "20m"
 }
 
+source "proxmox" "ubuntu-server-pve02" {
+
+  # Proxmox Connection Settings
+  proxmox_url = "${var.proxmox_hostname}"
+  username    = "${var.proxmox_username}"
+  token = "${var.proxmox_api_key}"
+  # (Optional) Skip TLS Verification
+  insecure_skip_tls_verify = true
+
+  # VM General Settings
+  node                 = "pve02"
+  vm_name              = "${var.vm_name}"
+  vm_id = 1002
+  template_description = "Ubuntu Server jammy Image"
+
+  iso_file         = "local:iso/ubuntu-22.04.2-live-server-amd64.iso"
+  iso_storage_pool = "local"
+  unmount_iso      = true
+
+  qemu_agent = true
+
+  scsi_controller = "virtio-scsi-pci"
+
+  disks {
+    disk_size         = "20G"
+    format            = "raw"
+    storage_pool      = "local-lvm"
+    storage_pool_type = "lvm"
+    type              = "scsi"
+  }
+
+  cores = "1"
+
+  memory = "2048"
+
+  network_adapters {
+    model    = "virtio"
+    bridge   = "vmbr0"
+    firewall = "false"
+  }
+
+  cloud_init              = false
+  cloud_init_storage_pool = "local-lvm"
+  boot_command = [
+    "<esc><wait>",
+    "e<wait>",
+    "<down><down><down><end>",
+    "<bs><bs><bs><bs><wait>",
+    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+    "<f10><wait>"
+  ]
+
+  boot                 = "c"
+  boot_wait            = "5s"
+  http_directory       = "http"
+  ssh_username         = "ubuntu"
+  ssh_password         = "ubuntu"
+  #ssh_private_key_file = "~/.ssh/id_rsa"
+  ssh_timeout          = "20m"
+}
+
+
+source "proxmox" "ubuntu-server-pve03" {
+
+  # Proxmox Connection Settings
+  proxmox_url = "${var.proxmox_hostname}"
+  username    = "${var.proxmox_username}"
+  token = "${var.proxmox_api_key}"
+  # (Optional) Skip TLS Verification
+  insecure_skip_tls_verify = true
+
+  # VM General Settings
+  node                 = "pve03"
+  vm_name              = "${var.vm_name}"
+  vm_id = 1003
+  template_description = "Ubuntu Server jammy Image"
+
+  iso_file         = "local:iso/ubuntu-22.04.2-live-server-amd64.iso"
+  iso_storage_pool = "local"
+  unmount_iso      = true
+
+  qemu_agent = true
+
+  scsi_controller = "virtio-scsi-pci"
+
+  disks {
+    disk_size         = "20G"
+    format            = "raw"
+    storage_pool      = "local-lvm"
+    storage_pool_type = "lvm"
+    type              = "scsi"
+  }
+
+  cores = "1"
+
+  memory = "2048"
+
+  network_adapters {
+    model    = "virtio"
+    bridge   = "vmbr0"
+    firewall = "false"
+  }
+
+  cloud_init              = false
+  cloud_init_storage_pool = "local-lvm"
+  boot_command = [
+    "<esc><wait>",
+    "e<wait>",
+    "<down><down><down><end>",
+    "<bs><bs><bs><bs><wait>",
+    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+    "<f10><wait>"
+  ]
+
+  boot                 = "c"
+  boot_wait            = "5s"
+  http_directory       = "http"
+  ssh_username         = "ubuntu"
+  ssh_password         = "ubuntu"
+  #ssh_private_key_file = "~/.ssh/id_rsa"
+  ssh_timeout          = "20m"
+}
+
+
 build {
 
-  name    = "ubuntu-server-jammy"
-  sources = ["source.proxmox.ubuntu-server-jammy"]
+  name    = "Docker-Servers"
+  sources = ["source.proxmox.ubuntu-server-pve01",
+             "source.proxmox.ubuntu-server-pve02",
+             "source.proxmox.ubuntu-server-pve03"
+  ]
 
   # Provisioning the VM Template for Cloud-Init Integration in Proxmox #1
   provisioner "shell" {

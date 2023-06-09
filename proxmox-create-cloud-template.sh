@@ -8,7 +8,7 @@ SRC_IMG="https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd
 IMG_NAME="jammy-server-cloudimg-amd64-disk-kvm.qcow2"
 
 TEMPL_NAME="ubuntu2204-cloud-base"
-VMID="9000"
+VMID="9001"
 MEM="512"
 DISK_SIZE="20G"
 DISK_STOR="local-lvm"
@@ -33,6 +33,8 @@ qm set $VMID --scsihw virtio-scsi-pci --scsi0 $DISK_STOR:vm-$VMID-disk-0
 qm set $VMID --ide2 $DISK_STOR:cloudinit
 qm set $VMID --boot c --bootdisk scsi0
 qm set $VMID --serial0 socket --vga serial0
+qm set $VMID --ciuser="ubuntu" 
+qm set $VMID --cipassword="ubuntu"
 qm set $VMID --ipconfig0 ip=dhcp
 qm resize $VMID scsi0 $DISK_SIZE
 
